@@ -17,9 +17,11 @@ from block_crawler import CrawlThread, CrawlJob, StoreThread
 
 
 if __name__ == "__main__":
+    
+    #server = "http://192.168.1.65:8114"
+    server = "http://localhost:8114"
+    dbsave = "sql.db"
     # create job
-    server = "http://192.168.1.65:8114"
-    #server = "http://localhost:8114"
     job = CrawlJob(
         block_range = (0, 1500000), 
         rpc = server,
@@ -35,7 +37,7 @@ if __name__ == "__main__":
         job.threads.append(thread)
 
     # run the store thread
-    sthread = StoreThread(job.data_queue, "D:/sql.db")
+    sthread = StoreThread(job.data_queue, dbsave)
     sthread.setDaemon(True)
     sthread.start()
 
