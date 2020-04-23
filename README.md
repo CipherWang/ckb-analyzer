@@ -1,2 +1,13 @@
 # ckb-analyzer
-analyze the block &amp; transaction data of Nervos CKB
+## How to
+
+index blocks
+```
+python3 grabber.py
+```
+
+execute anlayzers
+
+```
+python3 analyzer.py
+```
