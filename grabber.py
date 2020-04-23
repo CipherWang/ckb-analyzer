@@ -13,7 +13,7 @@ from queue import Queue
 import signal
 import sys
 
-from block_crawler import CrawlThread, CrawlJob, StoreThread
+from worker.block_crawler import CrawlThread, CrawlJob, StoreThread
 
 
 if __name__ == "__main__":

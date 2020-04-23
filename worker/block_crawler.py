@@ -6,7 +6,7 @@ import json
 import requests
 from queue import Queue
 import time
-from block_storage import CKBBlockStore
+from worker.block_storage import CKBBlockStore
 
 # get block data from rpc
 class CrawlThread(threading.Thread):
