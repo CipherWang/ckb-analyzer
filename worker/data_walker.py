@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
+from time import time
 
 class BlockHeaderParser():
     def work(self, record):
@@ -45,10 +46,17 @@ class BlockWalker():
         cursor.execute("SELECT * FROM tb_header WHERE number >= %d AND number <= %d ORDER BY number;" % (bond['min'], bond['max']) )
         record = cursor.fetchone()
         # process single record
+        lcont = 1
+        last_time = time()
         while record:
+            if time() - last_time > 0.1:
+                print("step 1/2: data reading %d/%d." % (lcont, bond['max']-bond['min']), end="\r")
+                last_time = time()
+            lcont += 1
             for parser in self.parsers:
                 parser.work(record)
             record = cursor.fetchone()
         # after single record process, do calculation
+        print("\nstep 2/2: analyzing...")
         for parser in self.parsers:
             parser.analyze()

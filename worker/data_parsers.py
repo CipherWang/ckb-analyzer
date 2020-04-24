@@ -33,6 +33,9 @@ class ParserBlockTime(BlockHeaderParser):
         blkcount = 0
         taccum = 0.0
         hourly_average = []
+        slot = 5000
+        distribution = np.zeros(slot+1)
+        distribution_x = np.linspace(0, slot/10., slot+1)
         for ti in data:
             blkcount += 1
             taccum += ti
@@ -41,10 +44,16 @@ class ParserBlockTime(BlockHeaderParser):
                 hourly_average.append(average)
                 blkcount = 0
                 taccum = 0
+            if int(ti*10) >= slot:
+                distribution[slot] += 1
+            else:
+                distribution[int(ti*10)] += 1
 
         self.hourly_average = hourly_average
         self.smooth_data_daily = smooth_window(hourly_average, 24)
         self.smooth_data_weekly = smooth_window(hourly_average, 24*7)
+        distribution = distribution * 100. / np.sum(distribution)
+        self.distribution = (distribution_x, distribution)
 
     def export(self):
         return {
@@ -56,6 +65,12 @@ class ParserBlockTime(BlockHeaderParser):
 
     def show(self):
         data = self.export()
+        plt.plot(self.distribution[0], self.distribution[1])
+        plt.xlim(self.distribution[0][0], self.distribution[0][len(self.distribution[0])-1])
+        plt.ylim(0)
+        plt.xlabel("block interval / second")
+        plt.ylabel("percentage / %")
+        plt.show()
         plt.plot(np.array(data['block_intervals'])[:,1], '.', ms=0.5)
         plt.show()
         plt.plot(data['daily'], 'b', lw=1)

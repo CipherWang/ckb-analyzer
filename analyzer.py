@@ -6,9 +6,9 @@ from worker.data_parsers import ParserBlockTime
 import numpy as np
 from matplotlib import pyplot as plt
 
-bw = BlockWalker("d:/sql.db")
+bw = BlockWalker("sample.sqlite3")
 pb = ParserBlockTime()
 bw.register_parser(pb)
-bw.walk_through((10000, 1500000))
+bw.walk_through()
 
 pb.show()
